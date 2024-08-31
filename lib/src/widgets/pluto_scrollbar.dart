@@ -621,7 +621,9 @@ class PlutoGridCupertinoScrollbarState extends State<PlutoScrollbar>
       child: RepaintBoundary(
         child: RawGestureDetector(
           gestures: _gestures,
-          child: child,
+          child: AbsorbPointer(
+            child: child,
+          ),
         ),
       ),
     );
