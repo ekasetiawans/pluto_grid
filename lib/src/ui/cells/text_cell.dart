@@ -133,25 +133,31 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
     return false;
   }
 
+  void _performUpdate() {
+    widget.stateManager.changeCellValue(widget.cell, _textController.text);
+    if (!cellFocus.hasFocus) {
+      _textController.text = formattedValue;
+
+      _initialCellValue = _textController.text;
+      _textController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _textController.text.length),
+      );
+    }
+
+    _cellEditingStatus = _CellEditingStatus.updated;
+  }
+
   void _changeValue() {
     if (formattedValue == _textController.text) {
       return;
     }
 
-    widget.stateManager.changeCellValue(widget.cell, _textController.text);
-
-    _textController.text = formattedValue;
-
-    _initialCellValue = _textController.text;
-
-    _textController.selection = TextSelection.fromPosition(
-      TextPosition(offset: _textController.text.length),
-    );
-
-    _cellEditingStatus = _CellEditingStatus.updated;
+    _performUpdate();
   }
 
   void _handleOnChanged(String value) {
+    _performUpdate();
+
     _cellEditingStatus = formattedValue != value.toString()
         ? _CellEditingStatus.changed
         : _initialCellValue.toString() == value.toString()
@@ -238,6 +244,7 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
       onChanged: _handleOnChanged,
       onEditingComplete: _handleOnComplete,
       onSubmitted: (_) => _handleOnComplete(),
+      onTapOutside: (_) => _handleOnComplete(),
       onTap: _handleOnTap,
       style: widget.stateManager.configuration.style.cellTextStyle,
       decoration: const InputDecoration(
