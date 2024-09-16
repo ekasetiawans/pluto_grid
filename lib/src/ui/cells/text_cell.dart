@@ -136,6 +136,10 @@ mixin TextCellState<T extends TextCell> on State<T> implements TextFieldProps {
   void _performUpdate() {
     widget.stateManager.changeCellValue(widget.cell, _textController.text);
     if (!cellFocus.hasFocus) {
+      if (_textController.text == formattedValue) {
+        return;
+      }
+
       _textController.text = formattedValue;
 
       _initialCellValue = _textController.text;
