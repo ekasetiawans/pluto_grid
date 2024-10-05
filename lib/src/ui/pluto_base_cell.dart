@@ -109,10 +109,16 @@ class PlutoBaseCell extends StatelessWidget
       behavior: HitTestBehavior.translucent,
       // Essential gestures.
       onTapUp: _handleOnTapUp,
-      onLongPressStart: _handleOnLongPressStart,
-      onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,
-      onLongPressEnd: _handleOnLongPressEnd,
+      // onLongPressStart: _handleOnLongPressStart,
+      // onLongPressMoveUpdate: _handleOnLongPressMoveUpdate,
+      // onLongPressEnd: _handleOnLongPressEnd,
       // Optional gestures.
+      onLongPressStart: (details) {
+        _addGestureEvent(
+          PlutoGridGestureType.onSecondaryTap,
+          details.globalPosition,
+        );
+      },
       onDoubleTap: _onDoubleTapOrNull(),
       onSecondaryTapDown: _onSecondaryTapOrNull(),
       child: _CellContainer(
